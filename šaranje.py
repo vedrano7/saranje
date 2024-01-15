@@ -3,10 +3,20 @@ from tkinter import colorchooser
 import PIL.ImageGrab as ImageGrab
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import PhotoImage
+from PIL import Image
 
 root = Tk()
 root.title("Šaranje")
 root.geometry("751x600")
+
+# Convert ICO to GIF
+ico_path = 'C:/Users/Vedran/Desktop/sharanje/paintingIcon.ico'
+img = Image.open(ico_path)
+img.save('icon.gif', 'gif')
+
+# Set the GIF as an icon
+root.iconphoto(True, PhotoImage(file='icon.gif'))
 
 # -------------- variables --------------------
 
