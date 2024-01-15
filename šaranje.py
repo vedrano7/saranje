@@ -8,7 +8,7 @@ from PIL import Image
 
 root = Tk()
 root.title("Šaranje")
-root.geometry("1020x800")
+root.geometry("751x600")
 
 # Convert ICO to GIF
 ico_path = 'paintingIcon.ico'
@@ -91,7 +91,7 @@ def saveImage():
     fileLocation = filedialog.asksaveasfilename(defaultextension="jpg")
     x = root.winfo_rootx()
     y = root.winfo_rooty()+100
-    img = ImageGrab.grab(bbox=(x,y,x+1020,y+700))
+    img = ImageGrab.grab(bbox=(x,y,x+751,y+500))
     img.save(fileLocation)
     showImage = messagebox.askyesno("Šaranje" , "Želite li odmah otvoriti sliku?")
     if showImage:
@@ -217,10 +217,10 @@ textTitleButton.grid(row=0 , column=0)
 
 # Frame - 2 - Canvas
 
-frame2 = Frame(root , height=640 , width=1020 , bg="yellow")
+frame2 = Frame(root , height=500 , width=1100 , bg="yellow")
 frame2.grid(row=1 , column=0)
 
-canvas = Canvas(frame2 , height=640 , width=1020 , bg="white" )
+canvas = Canvas(frame2 , height=500 , width=1100 , bg="white" )
 canvas.grid(row=0 , column=0)
 
 canvas.bind("<B1-Motion>", paint)
