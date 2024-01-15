@@ -11,7 +11,7 @@ root.title("Šaranje")
 root.geometry("751x600")
 
 # Convert ICO to GIF
-ico_path = 'C:/Users/Vedran/Desktop/sharanje/paintingIcon.ico'
+ico_path = 'paintingIcon.ico'
 img = Image.open(ico_path)
 img.save('icon.gif', 'gif')
 
