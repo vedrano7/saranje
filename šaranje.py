@@ -80,7 +80,7 @@ def paint(event):
     if event.type == "5" :
         prevPoint = [0,0]
 
-def paintRight(event):
+def paintRightClick(event):
     x = event.x
     y = event.y
     canvas.create_arc(x,y,x+stroke_size.get() , y+stroke_size.get() , fill=stroke_color.get() , outline=stroke_color.get() , width=stroke_size.get())
@@ -224,7 +224,7 @@ canvas = Canvas(frame2 , height=500 , width=1100 , bg="white" )
 canvas.grid(row=0 , column=0)
 canvas.bind("<B1-Motion>", paint)
 canvas.bind("<ButtonRelease-1>", paint)
-canvas.bind("<B3-Motion>" , paintRight)
+canvas.bind("<B3-Motion>" , paintRightClick)
 canvas.bind("<Button-2>", writeText)
 
 root.resizable(False , False)
