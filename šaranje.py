@@ -7,17 +7,13 @@ from tkinter import messagebox
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 
+#glavni prozor, varijable i inicijalizacija vrijednosti
+
 root = Tk()
 root.title("Šaranje")
 root.geometry("751x600")
 
-# Set the GIF as an icon
 root.iconphoto(True, PhotoImage(file='icon.gif'))
-
-# -------------- variables --------------------
-
-# stroke size options 
-options = [1,2,3,4,5,10]
 
 stroke_size = IntVar()
 stroke_size.set(1)
@@ -25,20 +21,20 @@ stroke_size.set(1)
 stroke_color = StringVar()
 stroke_color.set("black")
 
-previousColor = StringVar()
-previousColor.set("white")
+prevColor = StringVar()
+prevColor.set("white")
 
-previousColor2 = StringVar()
-previousColor2.set("white")
+prev2Color = StringVar()
+prev2Color.set("white")
 
-# variables for pencil 
 prevPoint = [0,0]
 currentPoint = [0,0] 
 
-# variable for text
 textValue = StringVar()
 
-# --------------------- functions -------------------------
+options = [1,2,3,4,5,10]
+
+#funkcije
 
 def usePencil():
     stroke_color.set("black")
@@ -51,42 +47,39 @@ def useEraser():
 def selectColor():
     selectedColor = colorchooser.askcolor("blue" , title="Spektar boja")
     if selectedColor[1] != None :
-        previousColor2.set(previousColor.get())
-        previousColor.set(stroke_color.get())
+        prev2Color.set(prevColor.get())
+        prevColor.set(stroke_color.get())
         
-        previousColorButton["bg"] = previousColor.get()
-        previousColor2Button["bg"] = previousColor2.get()
+        prevColorButton["bg"] = prevColor.get()
+        prev2ColorButton["bg"] = prev2Color.get()
         
         stroke_color.set(selectedColor[1])
         
-
-def change_colors(new_color):
+def changeColors(new_color):
     if new_color!=stroke_color.get():
-        if new_color!=previousColor.get():
-            previousColor2.set(previousColor.get())
-            previousColor.set(stroke_color.get())
+        if new_color!=prevColor.get():
+            prev2Color.set(prevColor.get())
+            prevColor.set(stroke_color.get())
             
-            previousColorButton["bg"] = previousColor.get()
-            previousColor2Button["bg"] = previousColor2.get()
+            prevColorButton["bg"] = prevColor.get()
+            prev2ColorButton["bg"] = prev2Color.get()
                 
-        elif new_color==previousColor.get():
-            previousColor2.set(previousColor2.get())
-            previousColor.set(stroke_color.get())
+        elif new_color==prevColor.get():
+            prev2Color.set(prev2Color.get())
+            prevColor.set(stroke_color.get())
 
 
-            previousColorButton["bg"] = previousColor.get()
-            previousColor2Button["bg"] = previousColor2.get()
+            prevColorButton["bg"] = prevColor.get()
+            prev2ColorButton["bg"] = prev2Color.get()
             
         stroke_color.set(new_color)
         
-    
 def paint(event):
     global prevPoint
     global currentPoint
     x = event.x
     y = event.y
     currentPoint = [x,y]
-    # canvas.create_oval(x , y , x +5 , y + 5 , fill="black")
 
     if prevPoint != [0,0] : 
         canvas.create_polygon(prevPoint[0] , prevPoint[1] , currentPoint[0] , currentPoint[1],fill=stroke_color.get() , outline=stroke_color.get() , width=stroke_size.get())        
@@ -101,7 +94,6 @@ def paintRightClick(event):
     y = event.y
     canvas.create_arc(x,y,x+stroke_size.get() , y+stroke_size.get() , fill=stroke_color.get() , outline=stroke_color.get() , width=stroke_size.get())
     
-
 def saveImage():
     try:
         fileLocation = filedialog.asksaveasfilename(defaultextension="jpg")
@@ -116,7 +108,7 @@ def saveImage():
     except Exception as e:
         messagebox.showinfo("Greška" , "Neuspjelo spremanje slike")
        
-def clear():
+def clearCanvas():
     if messagebox.askokcancel("Šaranje" , "Želite li očistiti platno?"):
         canvas.delete('all')
 
@@ -133,24 +125,25 @@ def loadImage():
         messagebox.showinfo("Greška" , "Neuspjelo učitavanje slike")
 
 def help():
-    helpText = "1. Ako držiš desni klik pri crtanju dobit ćeš iscrtkanu crtu \n2.Ako stisneš gumb za listanje na mišu zalijepit ćeš tekst koji si napisao u desnom gornjem kutu"
+    helpText = "1. Ako držiš desni klik pri crtanju dobit ćeš iscrtkanu crtu \n2.Ako stisneš gumb za listanje na mišu zalijepit ćeš tekst koji si napisao u kvadratiću za tekst"
     messagebox.showinfo("Savjeti: " , helpText)
 
 def about():
     messagebox.showinfo("O programu" , "najjači projekt za oop")
 
-def writeText(event):
+def pasteText(event):
     canvas.create_text(event.x , event.y , text=textValue.get())
-# ------------------- User Interface -------------------
+    
+#GUI
 
-# Frame - 1 : Tools 
+    #gornji okvir
 
-frame1 = Frame(root , height=100 , width=1100 )
-frame1.grid(row=0 , column=0, sticky=NW)
+upperFrame = Frame(root , height=100 , width=1100 )
+upperFrame.grid(row=0 , column=0, sticky=NW)
 
-# toolsFrame 
+        #okvir za pribor
 
-toolsFrame = Frame(frame1 , height=100 , width=100, relief=SUNKEN , borderwidth=3)
+toolsFrame = Frame(upperFrame , height=100 , width=100, relief=SUNKEN , borderwidth=3)
 toolsFrame.grid(row=0 , column=0 )
 
 pencilButton = Button(toolsFrame , text="Olovka" , width=10 , command=usePencil)
@@ -158,9 +151,9 @@ pencilButton.grid(row=0 , column=0)
 eraserButton = Button(toolsFrame , text="Gumica" , width=10 , command=useEraser)
 eraserButton.grid(row=1 , column=0)
 
-# sizeFrame 
+        #okvir za debljinu pribora
 
-sizeFrame = Frame(frame1 , height=100 , width=100, relief=SUNKEN , borderwidth=3 )
+sizeFrame = Frame(upperFrame , height=100 , width=100, relief=SUNKEN , borderwidth=3 )
 sizeFrame.grid(row=0 , column=1 )
 
 sizeLabel = Label(sizeFrame , text="Debljina", width=10)
@@ -168,65 +161,54 @@ sizeLabel.grid(row=0 , column=0)
 sizeList = OptionMenu(sizeFrame , stroke_size , *options)
 sizeList.grid(row=1 , column=0)
 
+        #okvir za spektar boja i proslu i pretproslu boju
 
-# colorBoxFrame
+colorSpectrumFrame = Frame(upperFrame , height=100 , width=100 ,relief=SUNKEN , borderwidth=3 )
+colorSpectrumFrame.grid(row = 0 , column=2)
 
-colorBoxFrame = Frame(frame1 , height=100 , width=100 ,relief=SUNKEN , borderwidth=3 )
-colorBoxFrame.grid(row = 0 , column=2)
+colorSpectrumButton = Button(colorSpectrumFrame , text="Spektar boja" , width=10 , command=selectColor)
+colorSpectrumButton.grid(row=0 , column=0)
 
-colorBoxButton = Button(colorBoxFrame , text="Spektar boja" , width=10 , command=selectColor)
-colorBoxButton.grid(row=0 , column=0)
+prevColorButton = Button(colorSpectrumFrame , text="Prošla" , width=10 , command=lambda:changeColors(prevColor.get()))
+prevColorButton.grid(row=1 , column=0)
+prev2ColorButton = Button(colorSpectrumFrame , text="Pretprošla" , width=10 , command=lambda:changeColors(prev2Color.get()))
+prev2ColorButton.grid(row=2 , column=0)
 
-previousColorButton = Button(colorBoxFrame , text="Prošla" , width=10 , command=lambda:change_colors(previousColor.get()))
-previousColorButton.grid(row=1 , column=0)
-previousColor2Button = Button(colorBoxFrame , text="Pretprošla" , width=10 , command=lambda:change_colors(previousColor2.get()))
-previousColor2Button.grid(row=2 , column=0)
+        #okvir za brz odabir boja
 
-# colorsFrame
-
-colorsFrame = Frame(frame1, height=100 , width=100, relief=SUNKEN , borderwidth=3)
+colorsFrame = Frame(upperFrame, height=100 , width=100, relief=SUNKEN , borderwidth=3)
 colorsFrame.grid(row = 0 , column=3)
 
-redButton = Button(colorsFrame, bg="red", width=10, command=lambda: change_colors("red"))
+redButton = Button(colorsFrame, bg="red", width=10, command=lambda: changeColors("red"))
 redButton.grid(row=0, column=0)
-greenButton = Button(colorsFrame, bg="green", width=10, command=lambda: change_colors("green"))
+greenButton = Button(colorsFrame, bg="green", width=10, command=lambda: changeColors("green"))
 greenButton.grid(row=1, column=0)
-blueButton = Button(colorsFrame, bg="blue", width=10, command=lambda: change_colors("blue"))
+blueButton = Button(colorsFrame, bg="blue", width=10, command=lambda: changeColors("blue"))
 blueButton.grid(row=2, column=0)
-yellowButton = Button(colorsFrame, bg="yellow", width=10, command=lambda: change_colors("yellow"))
+yellowButton = Button(colorsFrame, bg="yellow", width=10, command=lambda: changeColors("yellow"))
 yellowButton.grid(row=0, column=1)
-orangeButton = Button(colorsFrame, bg="orange", width=10, command=lambda: change_colors("orange"))
+orangeButton = Button(colorsFrame, bg="orange", width=10, command=lambda: changeColors("orange"))
 orangeButton.grid(row=1, column=1)
-purpleButton = Button(colorsFrame, bg="purple", width=10, command=lambda: change_colors("purple"))
-purpleButton.grid(row=2, column=1)
+blackButton = Button(colorsFrame, bg="black", width=10, command=lambda: changeColors("black"))
+blackButton.grid(row=2, column=1)
 
-# saveImageFrame
+        #okvir za opcije upravljanja slikama/platnom
 
-saveImageFrame = Frame(frame1, height=100 , width=100, relief=SUNKEN , borderwidth=3)
-saveImageFrame.grid(row = 0 , column=4)
+imageAndCanvasOptionsFrame = Frame(upperFrame, height=100 , width=100, relief=SUNKEN , borderwidth=3)
+imageAndCanvasOptionsFrame.grid(row = 0 , column=4)
 
-saveImageButton = Button(saveImageFrame , text="Spremi" , bg="white" , width=10 , command=saveImage)
+saveImageButton = Button(imageAndCanvasOptionsFrame , text="Spremi" , bg="white" , width=10 , command=saveImage)
 saveImageButton.grid(row=0 , column=0)
 
-newImageButton = Button(saveImageFrame , text="Učitaj" , bg="white" , width=10 , command=loadImage)
-newImageButton.grid(row=1 , column=0)
+loadImageButton = Button(imageAndCanvasOptionsFrame , text="Učitaj" , bg="white" , width=10 , command=loadImage)
+loadImageButton.grid(row=1 , column=0)
 
-clearImageButton = Button(saveImageFrame , text="Očisti platno" , bg="white" , width=10 , command=clear)
-clearImageButton.grid(row=2 , column=0)
+clearCanvasButton = Button(imageAndCanvasOptionsFrame , text="Očisti platno" , bg="white" , width=10 , command=clearCanvas)
+clearCanvasButton.grid(row=2 , column=0)
 
-# helpSettingFrame
+        #okvir za tekst
 
-helpSettingFrame = Frame(frame1, height=100 , width=100, relief=SUNKEN , borderwidth=3)
-helpSettingFrame.grid(row = 0 , column=6)
-
-helpButton = Button(helpSettingFrame , text="Pomoć" , bg="white" , width=10 , command=help)
-helpButton.grid(row=0 , column=0)
-aboutButton = Button(helpSettingFrame , text="O programu" , bg="white" , width=10 , command=about)
-aboutButton.grid(row=2 , column=0)
-
-# textFrame
-
-textFrame = Frame(frame1, height=100 , width=200, relief=SUNKEN , borderwidth=3)
+textFrame = Frame(upperFrame, height=100 , width=200, relief=SUNKEN , borderwidth=3)
 textFrame.grid(row = 0 , column=5)
 
 textTitleButton = Label(textFrame , text="Kvadratić za tekst:" , bg="white" , width=20 )
@@ -236,18 +218,28 @@ entryButton.grid(row=1 , column=0)
 clearButton = Button(textFrame , text="Izbriši tekst" , bg="white" , width=20 , command=lambda:textValue.set(""))
 clearButton.grid(row=2 , column=0)
 
-# Frame - 2 - Canvas
+        #okvir za dodatne opcije
 
-frame2 = Frame(root , height=500 , width=1100 , bg="yellow")
-frame2.grid(row=1 , column=0)
+additionalOptionsFrame = Frame(upperFrame, height=100 , width=100, relief=SUNKEN , borderwidth=3)
+additionalOptionsFrame.grid(row = 0 , column=6)
 
-canvas = Canvas(frame2 , height=500 , width=1100 , bg="white" )
+helpButton = Button(additionalOptionsFrame , text="Pomoć" , bg="white" , width=10 , command=help)
+helpButton.grid(row=0 , column=0)
+aboutButton = Button(additionalOptionsFrame , text="O programu" , bg="white" , width=10 , command=about)
+aboutButton.grid(row=2 , column=0)
+
+    #donji okvir
+
+lowerFrame = Frame(root , height=500 , width=1100)
+lowerFrame.grid(row=1 , column=0)
+
+canvas = Canvas(lowerFrame , height=500 , width=1100 , bg="white" )
 canvas.grid(row=0 , column=0)
 
 canvas.bind("<B1-Motion>", paint)
 canvas.bind("<ButtonRelease-1>", paint)
 canvas.bind("<B3-Motion>" , paintRightClick)
-canvas.bind("<Button-2>", writeText)
+canvas.bind("<Button-2>", pasteText)
 
 root.resizable(False , False)
 root.mainloop()
