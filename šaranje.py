@@ -97,9 +97,9 @@ def paintRightClick(event):
 def saveImage():
     try:
         fileLocation = filedialog.asksaveasfilename(defaultextension="jpg")
-        x = root.winfo_rootx()
-        y = root.winfo_rooty()+100
-        img = ImageGrab.grab(bbox=(x,y,x+751,y+500))
+        x = lowerFrame.winfo_rootx()
+        y = lowerFrame.winfo_rooty()
+        img = ImageGrab.grab(bbox=(x+81,y+94,x+1150,y+819))
         img.save(fileLocation)
         showImage = messagebox.askyesno("Šaranje" , "Želite li odmah otvoriti sliku?")
         if showImage:
@@ -118,6 +118,7 @@ def loadImage():
         if file_path:
             img = Image.open(file_path)
             img = img.resize((1100, 500), Image.ANTIALIAS) if hasattr(Image, 'ANTIALIAS') else img
+            canvas.delete('all')
             canvas.image = ImageTk.PhotoImage(img)
             canvas.create_image(0, 0, anchor=tk.NW, image=canvas.image)
             
@@ -129,7 +130,7 @@ def help():
     messagebox.showinfo("Savjeti: " , helpText)
 
 def about():
-    messagebox.showinfo("O programu" , "najjači projekt za oop")
+    messagebox.showinfo("O programu" , "najjači oop projekt")
 
 def pasteText(event):
     canvas.create_text(event.x , event.y , text=textValue.get())
