@@ -99,7 +99,7 @@ def saveImage():
         fileLocation = filedialog.asksaveasfilename(defaultextension="jpg")
         x = lowerFrame.winfo_rootx()
         y = lowerFrame.winfo_rooty()
-        img = ImageGrab.grab(bbox=(x+81,y+94,x+1150,y+819))
+        img = ImageGrab.grab(bbox=(x,y,x+751,y+500))
         img.save(fileLocation)
         showImage = messagebox.askyesno("Šaranje" , "Želite li odmah otvoriti sliku?")
         if showImage:
